@@ -22,4 +22,5 @@ two things per year, depending on my time availability.
 
 There's a shortly described list:
 - remove event queue [MP-ES-F-01],
-- device id is PC hostname [MP-ES-F-02].
+- device id is PC hostname [MP-ES-F-02],
+- endpoint for getting list of available devices [MP-ES-F-03].
