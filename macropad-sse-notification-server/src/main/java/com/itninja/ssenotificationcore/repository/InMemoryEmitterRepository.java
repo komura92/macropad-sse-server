@@ -1,9 +1,8 @@
 package com.itninja.ssenotificationcore.repository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.itninja.ssenotificationcore.model.DeviceConnection;
-import com.itninja.ssenotificationcore.notification.model.SseNotificationDTO;
 
 
 @Repository
@@ -22,16 +20,9 @@ public class InMemoryEmitterRepository implements EmitterRepository {
 
     private final Map<String, DeviceConnection> devicesEmitters = new ConcurrentHashMap<>();
 
-    public Map<String, DeviceConnection> getDevicesEmitters() { return this.devicesEmitters; }
-
-    public void addToBuffer(String deviceId, SseNotificationDTO notificationDTO) {
-        Optional.ofNullable(devicesEmitters.get(deviceId))
-                .ifPresentOrElse(deviceConnection -> registerInBuffer(notificationDTO, deviceConnection),
-                        () -> devicesEmitters.put(deviceId, createConnection(notificationDTO)));
-    }
-
-    private void registerInBuffer(SseNotificationDTO notificationDTO, DeviceConnection deviceConnection) {
-        deviceConnection.getNotificationsToSend().add(notificationDTO);
+    @Override
+    public Set<String> getDevicesNames() {
+        return this.devicesEmitters.keySet();
     }
 
     @Override
@@ -45,14 +36,6 @@ public class InMemoryEmitterRepository implements EmitterRepository {
     private DeviceConnection createConnection(SseEmitter emitter) {
         return DeviceConnection.builder()
                 .emitter(emitter)
-                .build();
-    }
-
-    private DeviceConnection createConnection(SseNotificationDTO notificationDTO) {
-        List<SseNotificationDTO> notifications = new ArrayList<>();
-        notifications.add(notificationDTO);
-        return DeviceConnection.builder()
-                .notificationsToSend(notifications)
                 .build();
     }
 

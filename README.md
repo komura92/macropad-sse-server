@@ -17,10 +17,7 @@ We don't want anybody else to execute commands on our machine, right? :)
 
 ## Roadmap
 
-In the future, I want to add some additional features to this project. It will be probably about
-two things per year, depending on my time availability.
-
-There's a shortly described list:
-- remove event queue [MP-ES-F-01],
-- device id is PC hostname [MP-ES-F-02],
-- endpoint for getting list of available devices [MP-ES-F-03].
+In the future, I want to add some additional features to this project. There's a shortly described list:
+- ~~remove event queue [MP-ES-F-01]~~,
+- ~~device id is PC hostname [MP-ES-F-02]~~,
+- ~~endpoint for getting list of available devices [MP-ES-F-03]~~.
