@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SseNotificationDTO implements Serializable {
     private String action;
+    private String tabIdentifier;
 }

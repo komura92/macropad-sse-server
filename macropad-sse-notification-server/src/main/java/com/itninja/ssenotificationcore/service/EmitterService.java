@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.itninja.ssenotificationcore.model.DeviceType;
 import com.itninja.ssenotificationcore.repository.EmitterRepository;
 
 @Service
@@ -26,7 +27,11 @@ public class EmitterService {
         return repository.getDevicesNames();
     }
 
-    public SseEmitter createEmitter(String deviceId) {
+    public Set<String> getMacropadsNames() {
+        return repository.getMacropadsNames();
+    }
+
+    public SseEmitter createEmitter(String deviceId, DeviceType deviceType) {
         SseEmitter emitter = new SseEmitter(eventsTimeout);
         emitter.onCompletion(() -> {
             log.debug("COMPLETION");
@@ -40,7 +45,7 @@ public class EmitterService {
             log.debug("Create SseEmitter exception", e);
             repository.remove(deviceId);
         });
-        repository.addOrReplaceEmitter(deviceId, emitter);
+        repository.addOrReplaceEmitter(deviceId, emitter, deviceType);
         return emitter;
     }
 }

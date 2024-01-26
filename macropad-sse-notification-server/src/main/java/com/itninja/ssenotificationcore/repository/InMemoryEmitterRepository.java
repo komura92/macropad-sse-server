@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.itninja.ssenotificationcore.model.DeviceConnection;
+import com.itninja.ssenotificationcore.model.DeviceType;
 
 
 @Repository
@@ -22,20 +24,33 @@ public class InMemoryEmitterRepository implements EmitterRepository {
 
     @Override
     public Set<String> getDevicesNames() {
-        return this.devicesEmitters.keySet();
+        return getIdentifiersByType(DeviceType.PC);
     }
 
     @Override
-    public void addOrReplaceEmitter(String deviceId, SseEmitter emitter) {
-        log.info("REGISTERING:" + deviceId);
-        getConnection(deviceId)
-                        .ifPresentOrElse(connection -> updateConnectionWithEmitter(connection, emitter),
-                                () -> devicesEmitters.put(deviceId, createConnection(emitter)));
+    public Set<String> getMacropadsNames() {
+        return getIdentifiersByType(DeviceType.MACROPAD);
     }
 
-    private DeviceConnection createConnection(SseEmitter emitter) {
+    private Set<String> getIdentifiersByType(DeviceType macropad) {
+        return this.devicesEmitters.entrySet().stream()
+                .filter(entry -> macropad.equals(entry.getValue().getDeviceType()))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public void addOrReplaceEmitter(String deviceId, SseEmitter emitter, DeviceType deviceType) {
+        log.info("REGISTERING:" + deviceType.name() + ":" + deviceId);
+        getConnection(deviceId)
+                .ifPresentOrElse(connection -> updateConnectionWithEmitter(connection, emitter),
+                        () -> devicesEmitters.put(deviceId, createConnection(emitter, deviceType)));
+    }
+
+    private DeviceConnection createConnection(SseEmitter emitter, DeviceType deviceType) {
         return DeviceConnection.builder()
                 .emitter(emitter)
+                .deviceType(deviceType)
                 .build();
     }
 

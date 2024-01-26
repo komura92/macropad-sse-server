@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.itninja.ssenotificationcore.model.DeviceType;
 import com.itninja.ssenotificationcore.notification.model.SseNotificationDTO;
 import com.itninja.ssenotificationcore.service.EmitterService;
 import com.itninja.ssenotificationcore.service.SseNotificationService;
@@ -29,18 +30,25 @@ public class NotificationResource {
     public static final String NOTIFICATIONS_CONTROLLER_PATH = "notifications";
     public static final String SUBSCRIBE_PATH = "subscribe";
     public static final String DEVICES_PATH = "devices";
+    public static final String MACROPADS_PATH = "macropads";
 
     private final EmitterService emitterService;
     private final SseNotificationService notificationService;
 
     @GetMapping(SUBSCRIBE_PATH)
-    public SseEmitter subscribeToEvents(@RequestParam String deviceId) {
-        return emitterService.createEmitter(deviceId);
+    public SseEmitter subscribeToEvents(@RequestParam String deviceId,
+                                        @RequestParam DeviceType deviceType) {
+        return emitterService.createEmitter(deviceId, deviceType);
     }
 
     @GetMapping(DEVICES_PATH)
     public Set<String> getDevicesNames() {
         return emitterService.getDevicesNames();
+    }
+
+    @GetMapping(MACROPADS_PATH)
+    public Set<String> getMacropadsNames() {
+        return emitterService.getMacropadsNames();
     }
 
     @PostMapping
