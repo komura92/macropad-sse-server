@@ -10,7 +10,7 @@
   </parent>
   <groupId>com.example</groupId>
   <artifactId>macropad-sse-notification-server</artifactId>
-  <version>v0.0.2</version>
+  <version>v0.0.2-SNAPSHOT</version>
   <name>sse-notification-core</name>
   <description>sse-notification-core</description>
   <properties>
