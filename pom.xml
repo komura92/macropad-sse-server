@@ -10,7 +10,7 @@
   </parent>
   <groupId>com.itninja</groupId>
   <artifactId>macropad-sse-server</artifactId>
-  <version>v0.0.3</version>
+  <version>v0.0.4-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>macropad-sse-server</name>
   <description>macropad-sse-server</description>
