@@ -35,17 +35,24 @@ public class EmitterService {
         SseEmitter emitter = new SseEmitter(eventsTimeout);
         emitter.onCompletion(() -> {
             log.debug("COMPLETION");
-            repository.remove(deviceId);
+            repository.removeEmitter(deviceId);
         });
         emitter.onTimeout(() -> {
             log.debug("TIMEOUT");
-            repository.remove(deviceId);
+            repository.removeEmitter(deviceId);
         });
         emitter.onError(e -> {
             log.debug("Create SseEmitter exception", e);
-            repository.remove(deviceId);
+            repository.removeEmitter(deviceId);
         });
         repository.addOrReplaceEmitter(deviceId, emitter, deviceType);
         return emitter;
+    }
+
+    public void unregisterAll() {
+        repository.getDevicesNames()
+                .forEach(repository::unregister);
+        repository.getMacropadsNames()
+                .forEach(repository::unregister);
     }
 }

@@ -32,9 +32,9 @@ public class InMemoryEmitterRepository implements EmitterRepository {
         return getIdentifiersByType(DeviceType.MACROPAD);
     }
 
-    private Set<String> getIdentifiersByType(DeviceType macropad) {
+    private Set<String> getIdentifiersByType(DeviceType deviceType) {
         return this.devicesEmitters.entrySet().stream()
-                .filter(entry -> macropad.equals(entry.getValue().getDeviceType()))
+                .filter(entry -> deviceType.equals(entry.getValue().getDeviceType()))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
     }
@@ -60,14 +60,26 @@ public class InMemoryEmitterRepository implements EmitterRepository {
     }
 
     @Override
-    public void remove(String deviceId) {
-        log.info("REMOVING:" + deviceId);
+    public void removeEmitter(String deviceId) {
+        log.info("REMOVING EMITTER:" + deviceId);
         if (devicesEmitters.containsKey(deviceId)) {
             log.debug("Removing emitter for user: {}", deviceId);
             getConnection(deviceId)
                     .ifPresent(deviceConnection -> deviceConnection.setEmitter(null));
         } else {
             log.debug("No emitter to remove for user: {}", deviceId);
+        }
+    }
+
+    @Override
+    public void unregister(String deviceId) {
+        log.info("UNREGISTERING:" + deviceId);
+        removeEmitter(deviceId);
+        if (devicesEmitters.containsKey(deviceId)) {
+            devicesEmitters.remove(deviceId);
+            log.info("DEVICE UNREGISTERED:" + deviceId);
+        } else {
+            log.info("DEVICE NOT FOUND:" + deviceId);
         }
     }
 

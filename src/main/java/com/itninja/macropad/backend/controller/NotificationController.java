@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,9 +25,9 @@ import com.itninja.macropad.backend.notification.model.SseNotificationDTO;
 @Slf4j
 @CrossOrigin
 @RestController
-@RequestMapping(NotificationResource.NOTIFICATIONS_CONTROLLER_PATH)
 @RequiredArgsConstructor
-public class NotificationResource {
+@RequestMapping(NotificationController.NOTIFICATIONS_CONTROLLER_PATH)
+public class NotificationController {
     public static final String NOTIFICATIONS_CONTROLLER_PATH = "notifications";
     public static final String SUBSCRIBE_PATH = "subscribe";
     public static final String DEVICES_PATH = "devices";
@@ -57,5 +58,11 @@ public class NotificationResource {
                                            @RequestBody SseNotificationDTO event) {
         notificationService.sendNotifications(deviceIds, event);
         return event;
+    }
+
+
+    @DeleteMapping
+    public void unregisterAll() {
+        emitterService.unregisterAll();
     }
 }

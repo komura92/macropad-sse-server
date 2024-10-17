@@ -37,7 +37,7 @@ public class SseNotificationService implements NotificationService {
                         sseEmitter.send(eventMapper.toSseEventBuilder(event));
                     } catch (IOException | IllegalStateException e) {
                         log.warn("Error while sending event: {} for device: {} - exception:", event, deviceId, e);
-                        emitterRepository.remove(deviceId);
+                        emitterRepository.removeEmitter(deviceId);
                     }
                 }, () -> log.warn("No emitter for device {}", deviceId));
     }
