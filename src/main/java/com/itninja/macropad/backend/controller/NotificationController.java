@@ -3,6 +3,7 @@ package com.itninja.macropad.backend.controller;
 import java.util.List;
 import java.util.Set;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,23 +38,27 @@ public class NotificationController {
     private final SseNotificationService notificationService;
 
     @GetMapping(SUBSCRIBE_PATH)
+    @Operation(summary = "Subscribe for notifications")
     public SseEmitter subscribeToEvents(@RequestParam String deviceId,
                                         @RequestParam DeviceType deviceType) {
         return emitterService.createEmitter(deviceId, deviceType);
     }
 
     @GetMapping(DEVICES_PATH)
+    @Operation(summary = "Get registered PCs IDs")
     public Set<String> getDevicesNames() {
         return emitterService.getDevicesNames();
     }
 
     @GetMapping(MACROPADS_PATH)
+    @Operation(summary = "Get registered macropads IDs")
     public Set<String> getMacropadsNames() {
         return emitterService.getMacropadsNames();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @Operation(summary = "Send notification to devices by IDs")
     public SseNotificationDTO publishEvent(@RequestParam("deviceId") List<String> deviceIds,
                                            @RequestBody SseNotificationDTO event) {
         notificationService.sendNotifications(deviceIds, event);
@@ -62,6 +67,7 @@ public class NotificationController {
 
 
     @DeleteMapping
+    @Operation(summary = "Unregister all registered devices (macropads and PCs)")
     public void unregisterAll() {
         emitterService.unregisterAll();
     }
