@@ -13,7 +13,7 @@
 
     <groupId>com.itninja</groupId>
     <artifactId>macropad-sse-server</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>macropad-sse-server</name>
     <description>macropad-sse-server</description>
